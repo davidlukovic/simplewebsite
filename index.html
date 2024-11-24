@@ -3,27 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Text</title>
+    <title>Centered Text with Writing Animation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Optional background color */
+            background-color: #1f36ea; /* Black background for contrast */
+            font-family: 'Indie Flower', cursive; /* Handwritten-like font similar to Smooth Stone */
+            color: rgb(240, 219, 22); /* Text color */
         }
+
         .centered-text {
+            position: relative;
+            z-index: 1; /* Ensures text is above the hearts */
             text-align: center;
-            font-size: 2em; /* Adjust the font size as needed */
-            color: #eab803ea; /* Optional text color */
+            font-size: 5em;
+            white-space: nowrap; /* Prevent line breaks for typing effect */
+            overflow: hidden; /* Hide text outside the container during typing */
+            border-right: none; /* Removed the typing cursor */
+            animation: typing 4s steps(30, end) forwards;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; } /* Reveal full text width */
+        }
+
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: move 5s linear infinite;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
     <div class="centered-text">
-        SONJA VOLIM TE
+        SONJA VOLIM TE!
     </div>
+
+    <script>
+        const createHeart = () => {
+            const heart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            heart.setAttribute("class", "heart");
+            heart.setAttribute("viewBox", "0 0 24 24");
+            heart.setAttribute("fill", "red");
+
+            heart.innerHTML = `
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+            `;
+
+            // Randomize position and size
+            heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // Random duration between 2-5s
+
+            document.body.appendChild(heart);
+
+            // Remove the heart after the animation ends
+            setTimeout(() => {
+                heart.remove();
+            }, 5000); // Matches the animation duration
+        };
+
+        // Create hearts at regular intervals
+        setInterval(createHeart, 300); // Adjust interval to control frequency
+    </script>
 </body>
 </html>
